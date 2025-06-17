@@ -2,6 +2,7 @@
 session_start();
 require_once '../../config/database.php';
 
+
 // Obtener marcas y categorías
 $marcas = $pdo->query("SELECT id, name FROM brands")->fetchAll();
 $categorias = $pdo->query("SELECT id, name FROM categories")->fetchAll();

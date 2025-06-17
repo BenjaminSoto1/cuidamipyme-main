@@ -77,13 +77,19 @@ if (!empty($product_ids)) {
                 </td>
                 <td>
                     <a href="edit.php?id=<?= $product['id'] ?>" class="btn btn-warning btn-sm">✏️ Editar</a>
-                    <a href="../../controllers/DeleteProduct.php?id=<?= $product['id'] ?>" class="btn btn-danger btn-sm" onclick="return confirm('¿Seguro que querís borrar esta wea?')">🗑️ Eliminar</a>
+                    <a href="../../controllers/DeleteProduct.php?id=<?= $product['id'] ?>" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro que deseas eliminarlo?')">🗑️ Eliminar</a>
                 </td>
             </tr>
             <?php endforeach; ?>
         </tbody>
     </table>
+
+    <div class="text-center mt-4">
+    <a href="../dashboard.php" class="btn btn-secondary btn-sm">
+        ← Volver al Inicio
+    </a>
+</div>
+
 </div>
 </body>
 </html>
-

@@ -33,11 +33,11 @@ if ($nueva_categoria !== '') {
 }
 
 
-// Validación básica
 if (empty($name) || $price <= 0 || !$brand_id || !$category_id) {
-    die("Faltan datos obligatorios.");
+    $_SESSION['error'] = "⚠️ Faltan campos obligatorios.";
+    header("Location: ../views/products/create.php");
+    exit;
 }
-
 
 // Insertar producto
 $stmt = $pdo->prepare("INSERT INTO products (user_id, name, price, brand_id, category_id) VALUES (?, ?, ?, ?, ?)");
@@ -78,5 +78,6 @@ if (isset($_POST['sizes']) && isset($_POST['stock'])) {
     }
 }
 
+$_SESSION['success'] = "✅ Producto creado correctamente.";
 header("Location: ../views/products/index.php");
 exit;

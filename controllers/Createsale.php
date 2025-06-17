@@ -13,8 +13,11 @@ $product_id = $_POST['product_id'] ?? null;
 $size_id = $_POST['size_id'] ?? null;
 $quantity = max(1, (int)($_POST['quantity'] ?? 0));
 
+// Validación de campos
 if (!$client_name || !$product_id || !$size_id || $quantity <= 0) {
-    die("Faltan datos obligatorios.");
+    $_SESSION['error'] = "⚠️ Faltan campos obligatorios.";
+    header("Location: ../views/sales/create.php");
+    exit;
 }
 
 // Obtener precio y stock actual
@@ -28,11 +31,15 @@ $stmt->execute([$product_id, $size_id, $user_id]);
 $data = $stmt->fetch();
 
 if (!$data) {
-    die("Producto o talla no válidos.");
+    $_SESSION['error'] = "❌ Producto o talla no válidos.";
+    header("Location: ../views/sales/create.php");
+    exit;
 }
 
 if ($data['stock'] < $quantity) {
-    die("No hay suficiente stock para esta talla.");
+    $_SESSION['error'] = "❌ Stock insuficiente para esta talla.";
+    header("Location: ../views/sales/create.php");
+    exit;
 }
 
 $subtotal = $data['price'] * $quantity;
@@ -49,12 +56,12 @@ $stmt = $pdo->prepare("
 ");
 $stmt->execute([$sale_id, $product_id, $size_id, $quantity, $data['price'], $subtotal]);
 
-
 // Descontar stock
 $stmt = $pdo->prepare("
     UPDATE product_sizes SET stock = stock - ? WHERE product_id = ? AND size_id = ?
 ");
 $stmt->execute([$quantity, $product_id, $size_id]);
 
+$_SESSION['success'] = "✅ Venta registrada correctamente.";
 header("Location: ../views/sales/index.php");
 exit;
